@@ -36,7 +36,7 @@ class AircraftResource(resources.ModelResource):
     class Meta:
         model = Aircraft
         import_id_fields = ['aircraft_id']
-        fields = ('aircraft_id', 'airline', 'model_name', 'aircraft_type', 'manufacturer', 'registration_number', 'seating_capacity', 'maximum_speed', 'maximum_range', 'year_of_manufacture', 'engine_type', 'engines_count', 'first_class_seats', 'business_class_seats', 'economy_class_seats', 'created_at', 'updated_at')
+        fields = ('aircraft_id', 'airline', 'model_name', 'aircraft_type_name', 'manufacturer', 'registration_number', 'seating_capacity', 'maximum_speed', 'maximum_range', 'manufacture_date', 'last_maintenance_date', 'engine_type', 'engines_count', 'first_class_seats', 'business_class_seats', 'economy_class_seats', 'created_at', 'updated_at')
 
 class StaffPositionTypeResource(resources.ModelResource):
     class Meta:
@@ -85,7 +85,7 @@ class AircraftTypeAdmin(ImportExportModelAdmin):
 
 @admin.register(Aircraft)
 class AircraftAdmin(ImportExportModelAdmin):
-    list_display = ('aircraft_id', 'airline', 'model_name', 'aircraft_type', 'manufacturer', 'registration_number', 'seating_capacity', 'maximum_speed', 'maximum_range', 'manufacture_date', 'last_maintenance_date', 'engine_type', 'engines_count', 'first_class_seats', 'business_class_seats', 'economy_class_seats', 'created_at', 'updated_at')
+    list_display = ('aircraft_id', 'airline', 'model_name', 'aircraft_type_name', 'manufacturer', 'registration_number', 'seating_capacity', 'maximum_speed', 'maximum_range', 'manufacture_date', 'last_maintenance_date', 'engine_type', 'engines_count', 'first_class_seats', 'business_class_seats', 'economy_class_seats', 'created_at', 'updated_at')
     resource_class = AircraftResource
 
 @admin.register(StaffPositionType)

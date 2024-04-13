@@ -149,7 +149,7 @@ class Aircraft(models.Model):
     aircraft_id = models.CharField(max_length=20, primary_key=True, help_text="Id of the aircraft") # Aircraft Id
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="airline_aircrafts", help_text="Airline owning the aircraft")  # Airline owning the aircraft
     model_name = models.CharField(max_length=100, help_text="Name of the aircraft model")             # Name of the aircraft model
-    aircraft_type = models.ForeignKey(AircraftType, on_delete=models.CASCADE, related_name="aircraft_type", help_text="Type of the aircraft")  # Type of the aircraft
+    aircraft_type_name = models.ForeignKey(AircraftType, on_delete=models.CASCADE, related_name="aircraft_type_name", help_text="Type of the aircraft")  # Type of the aircraft
     manufacturer = models.CharField(max_length=100, help_text="Manufacturer of the aircraft")          # Manufacturer of the aircraft
     registration_number = models.CharField(max_length=20, unique=True, help_text="Registration number of the aircraft")  # Registration number of the aircraft
     seating_capacity = models.PositiveIntegerField(help_text="Seating capacity of the aircraft")      # Seating capacity of the aircraft
