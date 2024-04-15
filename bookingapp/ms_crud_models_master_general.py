@@ -1,4 +1,5 @@
 from .models_master_general import *
+from .convert_model_obj_to_dict import query_set_obj_to_dict,get_obj_to_dict
 # Country CRUD functions
 def create_country(code, name):
     try:
@@ -11,7 +12,7 @@ def create_country(code, name):
 def get_country(code):
     try:
         country = Country.objects.get(pk=code)
-        return country
+        return get_obj_to_dict(country)
     except Country.DoesNotExist:
         print(f"Country with code {code} does not exist.")
         return None
