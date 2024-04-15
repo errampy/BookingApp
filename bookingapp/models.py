@@ -44,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
     def __str__(self):
-        return str(self.phone_no)
+        return str(self.email)
 #  this models for MS
 
 class MSRegistration(models.Model):
@@ -162,7 +162,7 @@ class Aircraft(models.Model):
     first_class_seats = models.PositiveIntegerField(null=True, blank=True, help_text="Number of first class seats in the aircraft")    # Number of first class seats in the aircraft
     business_class_seats = models.PositiveIntegerField(null=True, blank=True, help_text="Number of business class seats in the aircraft")  # Number of business class seats in the aircraft
     economy_class_seats = models.PositiveIntegerField(null=True, blank=True, help_text="Number of economy class seats in the aircraft")  # Number of economy class seats in the aircraft
-    current_status = models.ForeignKey(AircraftStatusType, on_delete=models.CASCADE, related_name='aircraft_status_type', help_text='Current Status type of aircraft.')
+    current_status = models.ForeignKey(AircraftStatusType,null=True, on_delete=models.CASCADE, related_name='aircraft_status_type', help_text='Current Status type of aircraft.')
     
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
     updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update

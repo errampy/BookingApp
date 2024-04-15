@@ -189,6 +189,13 @@ class FlightRequirementsResource(resources.ModelResource):
         fields = ('requirement_id', 'route_id', 'aircraft_type_id', 'minimum_crew_members', 'maximum_cargo_weight', 'special_equipment_needed', 'additional_considerations')
         import_id_fields = ('requirement_id',)
 
+class AircraftStatusTypeResource(resources.ModelResource):
+    class Meta:
+        model = AircraftStatusType
+        fields = ('type_id', 'type_name', 'created_at', 'updated_at')
+
+        import_id_fields = ('type_id',)
+
 @admin.register(DistanceType)
 class DistanceTypeAdmin(ImportExportModelAdmin):
     resource_class = DistanceTypeResource
@@ -228,3 +235,7 @@ class CrewAdmin(ImportExportModelAdmin):
 class FlightRequirementsAdmin(ImportExportModelAdmin):
     resource_class = FlightRequirementsResource
     list_display = ('requirement_id', 'route_id', 'aircraft_type_id', 'minimum_crew_members', 'maximum_cargo_weight', 'special_equipment_needed', 'additional_considerations')
+@admin.register(AircraftStatusType)
+class AircraftStatusTypeAdmin(ImportExportModelAdmin):
+    resource_class = AircraftStatusTypeResource
+    list_display = ('type_id', 'type_name', 'created_at', 'updated_at')
