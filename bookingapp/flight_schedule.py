@@ -2,6 +2,33 @@ from .convert_model_obj_to_dict import get_obj_to_dict, query_set_obj_to_dict
 from .models import *
 from bookingpro.response_template import response_template
 from django.db.models import Q
+from datetime import datetime, timedelta
+from bookingapp.ms_crud_models import *
+
+
+
+
+def generate_schedule(start_date, end_date, operation_days):
+    # Convert start_date and end_date strings to datetime objects
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    # Initialize list to store the scheduled dates
+    scheduled_dates = []
+    
+    # Iterate through the date range
+    current_date = start_date
+    while current_date <= end_date:
+        # Check if the current day is in the operation days list
+        if current_date.strftime('%A') in operation_days:
+            scheduled_dates.append(current_date.strftime('%Y-%m-%d'))
+        
+        # Move to the next day
+        current_date += timedelta(days=1)
+    print('scheduled_dates ',scheduled_dates)
+    
+    return scheduled_dates
+
 def check_date_given_or_not(specific_date,from_date,end_date):
     if specific_date is None and from_date is None and end_date is None:
         return response_template(False,"Must be any one from this 'specific_date', 'from_date' and 'end_date' ")
@@ -76,7 +103,7 @@ def check_frequency_and_valid_mapped_or_not(frequency_id,route_id):
     except Exception as error:
         return response_template(False, f'''{error}''')
 
-def flight_schedul(schedule_id, flight_number, aircraft, route, frequency, staff, schedule_type, specific_date=None, from_date=None, end_date=None, notes=None, ticket_price=None):
+def flight_schedul(schedule_id, flight_number, aircraft, route, frequency, staff, schedule_type, status, specific_date=None, from_date=None, end_date=None, notes=None, ticket_price=None):
     response = check_date_given_or_not(specific_date,from_date,end_date)
     print(response)
     if not response.get('status'):
@@ -96,6 +123,13 @@ def flight_schedul(schedule_id, flight_number, aircraft, route, frequency, staff
     response = check_frequency_and_valid_mapped_or_not(frequency, route)
     if not response.get('status'):
         return response
+    response = create_flight_schedule(schedule_id, flight_number, aircraft, route, frequency, 
+                           staff, schedule_type, status,specific_date=specific_date, 
+                           from_date=from_date, end_date=end_date, notes=notes, 
+                           ticket_price=ticket_price)
+    
+    # this is in processing .......
+    return 'success'
 
     
     

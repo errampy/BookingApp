@@ -588,29 +588,26 @@ def delete_flight_registration(flight_number):
         print(f"Flight registration with flight number {flight_number} does not exist.")
         return False
 
-def create_flight_schedule(schedule_id, flight_number, airline_id, departure_airport_id, arrival_airport_id, departure_time, arrival_time, aircraft_id, status, duration=None, distance=None, delay_reason=None, gate=None, notes=None, total_seat=30, ticket_price=None):
+def create_flight_schedule(schedule_id, flight_number, aircraft, route, frequency, 
+                           staff, schedule_type, status,specific_date=None, 
+                           from_date=None, end_date=None, notes=None, 
+                           ticket_price=None):
     try:
-        airline = Airline.objects.get(airline_id=airline_id)
-        departure_airport = Airport.objects.get(airport_id=departure_airport_id)
-        arrival_airport = Airport.objects.get(airport_id=arrival_airport_id)
-        aircraft = Aircraft.objects.get(aircraft_id=aircraft_id)
+        aircraft = Aircraft.objects.get(aircraft_id=aircraft)
         
         flight_schedule = FlightSchedule.objects.create(
             schedule_id=schedule_id,
             flight_number=flight_number,
-            airline=airline,
-            departure_airport=departure_airport,
-            arrival_airport=arrival_airport,
-            departure_time=departure_time,
-            arrival_time=arrival_time,
             aircraft=aircraft,
+            route=route,
+            frequency=frequency,
+            staff=staff,
+            schedule_type=schedule_type,
+            specific_date=specific_date,
+            from_date=from_date,
+            end_date=end_date,
             status=status,
-            duration=duration,
-            distance=distance,
-            delay_reason=delay_reason,
-            gate=gate,
             notes=notes,
-            total_seat=total_seat,
             ticket_price=ticket_price
         )
         return flight_schedule
@@ -1091,3 +1088,23 @@ def delete_flight_requirement(requirement_id):
     else:
         print(f"Flight requirement with ID {requirement_id} does not exist.")
         return False
+
+
+# 
+
+def create_flight_schedule_details(flight_scheduled_id,schedule_ref_id,
+                                   scheduled_date,scheduled_day):
+    try:       
+        flight_schedule_details = FlightScheduleDetails.objects.create(
+            flight_scheduled_id=flight_scheduled_id,
+            schedule_ref_id=schedule_ref_id,
+            scheduled_date=scheduled_date,
+            scheduled_day=scheduled_day,
+        )
+        return flight_schedule_details
+    except ObjectDoesNotExist as e:
+        print(f"Error occurred while creating flight schedule details: {e}")
+        return None
+    except Exception as e:
+        print(f"Error occurred while creating flight schedule details: {e}")
+        return None

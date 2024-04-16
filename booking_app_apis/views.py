@@ -23,10 +23,11 @@ class FlightScheduleAPIView(APIView):
             specific_date = data.get('specific_date')
             from_date = data.get('from_date')
             end_date = data.get('end_date')
+            status = data.get('status')
             notes = data.get('notes')
             ticket_price = data.get('ticket_price')
             response =  flight_schedul(schedule_id, flight_number, aircraft, route, frequency, staff, 
-                                       schedule_type, specific_date=specific_date,
+                                       schedule_type, status=status,specific_date=specific_date,
                                        from_date=from_date, end_date=end_date, notes=notes, 
                                        ticket_price=ticket_price)
             print(response)

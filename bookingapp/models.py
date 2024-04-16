@@ -271,7 +271,7 @@ class FlightFrequencies(models.Model):
     route = models.ForeignKey(Routes, on_delete=models.CASCADE, related_name='route')
     departure_time = models.TimeField()
     arrival_time = models.TimeField()
-    days_of_operation = models.ForeignKey(DayOfOperation, on_delete=models.CASCADE, related_name='day_of_operations')
+    days_of_operation = models.ManyToManyField(DayOfOperation, related_name='day_of_operations')
     aircraft_type_id = models.ForeignKey(Aircraft, on_delete=models.CASCADE, related_name="aircraft_type_id")
     flight_status = models.CharField(max_length=20, choices=(('Scheduled', 'Scheduled'), ('Cancelled', 'Cancelled'), ('Completed', 'Completed')))
     
@@ -372,5 +372,12 @@ class FlightSchedule(models.Model):
 
     def __str__(self):
         return self.flight_number
+class FlightScheduleDetails(models.Model):
+    flight_scheduled_id = models.CharField(max_length=50, primary_key=True,)
+    schedule_ref_id = models.ForeignKey(FlightSchedule, on_delete=models.CASCADE, related_name='flight_schedule_ref_id')
+    scheduled_date = models.DateField()
+    scheduled_day = models.DateField()
+    # will add more column here as per requirementd
+
 
 

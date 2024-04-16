@@ -164,7 +164,7 @@ class DayOfOperationResource(resources.ModelResource):
 class FlightFrequenciesResource(resources.ModelResource):
     class Meta:
         model = FlightFrequencies
-        fields = ('frequency_id', 'route', 'departure_time', 'arrival_time', 'days_of_operation', 'aircraft_type_id', 'flight_status', 'created_at', 'updated_at')
+        fields = ('frequency_id', 'route', 'departure_time', 'arrival_time', 'aircraft_type_id', 'flight_status', 'created_at', 'updated_at')
         import_id_fields = ('frequency_id',)
 
 class CrewTypeResource(resources.ModelResource):
@@ -216,7 +216,7 @@ class DayOfOperationAdmin(ImportExportModelAdmin):
 @admin.register(FlightFrequencies)
 class FlightFrequenciesAdmin(ImportExportModelAdmin):
     resource_class = FlightFrequenciesResource
-    list_display = ('frequency_id', 'route', 'departure_time', 'arrival_time', 'days_of_operation', 'aircraft_type_id', 'flight_status', 'created_at', 'updated_at')
+    list_display = ('frequency_id', 'route', 'departure_time', 'arrival_time', 'aircraft_type_id', 'flight_status', 'created_at', 'updated_at')
 
 @admin.register(CrewType)
 class CrewTypeAdmin(ImportExportModelAdmin):
