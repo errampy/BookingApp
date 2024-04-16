@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookingapp',#booking app
     'import_export',
-    # 'rest_framework'# django rest framework
+    'rest_framework',# django rest framework
+    'booking_app_apis',# This app for apis
 ]
 
 MIDDLEWARE = [

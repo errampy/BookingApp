@@ -60,7 +60,7 @@ class FlightScheduleResource(resources.ModelResource):
     class Meta:
         model = FlightSchedule
         import_id_fields = ['schedule_id']
-        fields = ('schedule_id','flight_number', 'departure_airport', 'arrival_airport', 'departure_time', 'arrival_time', 'aircraft', 'staff', 'status', 'duration', 'distance', 'delay_reason', 'gate', 'notes', 'created_at', 'updated_at')
+        fields = ('schedule_id','flight_number', 'aircraft', 'route', 'frequency', 'status', 'notes', 'ticket_price', 'created_at', 'updated_at')
 
 # Register your models with their respective custom admin classes
 @admin.register(Region)
@@ -102,10 +102,12 @@ class StaffAdmin(ImportExportModelAdmin):
 class AirportAdmin(ImportExportModelAdmin):
     list_display = ('code', 'name', 'country', 'county_or_state', 'city', 'latitude', 'longitude', 'created_at', 'updated_at')
     resource_class = AirportResource
+    list_filter = ["code","name"]
+
 
 @admin.register(FlightSchedule)
 class FlightScheduleAdmin(ImportExportModelAdmin):
-    list_display = ('schedule_id','flight_number', 'departure_airport', 'arrival_airport', 'departure_time', 'arrival_time', 'aircraft', 'status', 'duration', 'distance', 'delay_reason', 'gate', 'notes', 'created_at', 'updated_at')
+    list_display = ('schedule_id','flight_number', 'aircraft', 'route', 'frequency', 'status', 'notes', 'ticket_price', 'created_at', 'updated_at')
     resource_class = FlightScheduleResource
 
 class MSRegistrationResource(resources.ModelResource):

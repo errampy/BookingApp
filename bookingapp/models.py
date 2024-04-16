@@ -169,7 +169,6 @@ class Aircraft(models.Model):
 
     def __str__(self):
         return f"{self.airline.name}"
-
 class StaffPositionType(models.Model):
     """
     Model representing the Staff Position Type
@@ -218,7 +217,8 @@ class Airport(models.Model):
     
 class FlightRegistration(models.Model):
     flight_number = models.CharField(max_length=20,primary_key=True)
-    airline = models.ForeignKey(Airline, verbose_name=_("Airline"), on_delete=models.CASCADE, related_name='name_of_the_airline')
+    departure_time = models.TimeField(help_text='Flight Departued Time',null=True)
+    arrival_time = models.TimeField(help_text='Flight Departued Time',null=True)
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
     updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update
 
@@ -229,40 +229,6 @@ class SeatMapping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
     updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update
 
-
-class FlightSchedule(models.Model):
-    """
-    Model representing a flight.    
-    """
-    schedule_id = models.CharField(max_length=20, primary_key=True, help_text="Unique identifier for the flight scheduled id")  # Unique identifier for the flight schedule id
-    flight_number = models.CharField(max_length=20, unique=True, help_text="Unique identifier for the flight id")  # Unique identifier for the flight id
-    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name='airline_name') # name of the airline
-    departure_airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name='departures', help_text="Airport of departure")   # Airport of departure
-    arrival_airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name='arrivals', help_text="Airport of arrival")       # Airport of arrival
-    departure_time = models.DateTimeField(help_text="Scheduled departure time")                   # Scheduled departure time
-    arrival_time = models.DateTimeField(help_text="Scheduled arrival time")                       # Scheduled arrival time
-    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE, help_text="Aircraft assigned to the flight")  # Aircraft assigned to the flight
-    staff = models.ManyToManyField(Staff, help_text="Staff assigned to the flight")               # Staff assigned to the flight
-    status = models.CharField(max_length=20, choices=(
-        ('Scheduled', 'Scheduled'),
-        ('Departed', 'Departed'),
-        ('In Air', 'In Air'),
-        ('Arrived', 'Arrived'),
-        ('Cancelled', 'Cancelled'),
-    ), help_text="Status of the flight")  # Status of the flight
-    duration = models.DurationField(null=True,blank=True, help_text="Duration of the flight")     # Duration of the flight
-    distance = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True, help_text="Distance of the flight")  # Distance of the flight
-    delay_reason = models.TextField(null=True, blank=True, help_text="Reason for flight delay")    # Reason for flight delay
-    gate = models.PositiveBigIntegerField(null=True,blank=True,help_text="Enter the gate number")  # Gate assigned for the flight
-    notes = models.TextField(null=True, blank=True, help_text="Additional notes about the flight")  # Additional notes about the flight
-    total_seat = models.PositiveIntegerField(help_text="total seat of the flight",default=30)
-    ticket_price = models.DecimalField(max_digits=10,decimal_places=2, help_text="ticket price for the flight")
-    
-    created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
-    updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update
-
-    def __str__(self):
-        return self.flight_number
 
 # Extra models as sir given today 12th apr 2024
 
@@ -311,6 +277,9 @@ class FlightFrequencies(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
     updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update
+
+    def __str__(self):
+        return str(self.frequency_id)
  
 class CrewType(models.Model):
     type_id = models.AutoField(primary_key=True)
@@ -369,5 +338,39 @@ class FlightRequirements(models.Model):
     def __str__(self):
         return f"Flight Requirement {self.requirement_id} for {self.route_id}"
     
+
+class FlightSchedule(models.Model):
+    """
+    Model representing a flight.    
+    """
+    schedule_id = models.CharField(max_length=20, primary_key=True, help_text="Unique identifier for the flight scheduled id")  # Unique identifier for the flight schedule id
+    flight_number = models.CharField(max_length=20, unique=True, help_text="Unique identifier for the flight id")  # Unique identifier for the flight id
+    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE, help_text="Aircraft assigned to the flight")  # Aircraft assigned to the flight
+    route = models.ForeignKey(Routes, null=True, on_delete=models.CASCADE, related_name='routes_for_flight_schedule') # Route Of Flight
+    frequency = models.ForeignKey(FlightFrequencies, null=True, on_delete=models.CASCADE, related_name='frequency_of_routes_for_flight_schedule') # Frequency Of the Route Of for Flight Scheduling
+    staff = models.ManyToManyField(Staff, help_text="Staff assigned to the flight")               # Staff assigned to the flight
+    SCHEDULE_TYPE = (
+        ('specific_date','specific_date'),
+        ('date_range','date_range'),
+    )
+    schedule_type = models.CharField(max_length=20, choices=SCHEDULE_TYPE, null=True, help_text='Select the Schedule type for scheduling the flight')
+    specific_date = models.DateField(help_text='Select Specific Date', null=True, blank=True)
+    from_date = models.DateField(help_text='Select From Date', null=True, blank=True)
+    end_date = models.DateField(help_text='Select End Date', null=True, blank=True)
+    status = models.CharField(max_length=20, choices=(
+        ('Scheduled', 'Scheduled'),
+        ('Departed', 'Departed'),
+        ('In Air', 'In Air'),
+        ('Arrived', 'Arrived'),
+        ('Cancelled', 'Cancelled'),
+    ), help_text="Status of the flight")  # Status of the flight
+    notes = models.TextField(null=True, blank=True, help_text="Additional notes about the flight")  # Additional notes about the flight
+    ticket_price = models.DecimalField(max_digits=10,decimal_places=2, help_text="ticket price for the flight")
+    
+    created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time of creation")      # Date and time of creation
+    updated_at = models.DateTimeField(auto_now=True, help_text="Date and time of last update")        # Date and time of last update
+
+    def __str__(self):
+        return self.flight_number
 
 
